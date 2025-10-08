@@ -1,16 +1,20 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "aon4o/cs2-gsi-parser",
+    "description": "A parser for CS2 Game State Integration data.",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "cs2",
+        "csgo",
+        "gsi",
+        "parser",
+        "aon4o",
+        "cs2-gsi-parser"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/aon4o/cs2-gsi-parser",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Alex Naida",
+            "email": "a.o.naidenov@gmail.com",
             "role": "Developer"
         }
     ],
@@ -18,28 +22,35 @@
         "php": "^8.4"
     },
     "require-dev": {
-        :require_dev_testing,
-        :require_dev_codestyle,
-        "spatie/ray": "^1.28"
+        "pestphp/pest": "^4.1",
+        "laravel/pint": "^1.25"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "Aon4o\\Cs2GsiParser\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Aon4o\\Cs2GsiParser\\Tests\\": "tests"
         }
     },
     "scripts": {
-        :scripts_testing,
-        :scripts_codestyle
+        "test": "vendor/bin/pest --parallel",
+        "test:unit": "@test --testsuite=Unit",
+        "test:arch": "@test --testsuite=Architecture",
+        "test:coverage": "@test --coverage",
+
+        "lint": "vendor/bin/pint",
+        "lint:test": "vendor/bin/pint --test",
+
+        "refactor": "vendor/bin/rector",
+        "refactor:test": "vendor/bin/rector --dry-run"
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            :plugins_testing,
+            "pestphp/pest-plugin": true,
             "phpstan/extension-installer": true
         }
     },
