@@ -2,6 +2,4 @@
 
 namespace Aon4o\Cs2GsiParser;
 
-class Cs2GsiParserClass
-{
-}
+class Cs2GsiParserClass {}
