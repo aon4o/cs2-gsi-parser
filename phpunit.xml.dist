@@ -12,8 +12,14 @@
     cacheDirectory=".phpunit.cache"
 >
     <testsuites>
-        <testsuite name="Aon4o Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Architecture">
+            <directory>tests/Architecture</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
     <coverage>
@@ -28,7 +34,7 @@
     </logging>
     <source>
         <include>
-            <directory>./src</directory>
+            <directory>src</directory>
         </include>
     </source>
 </phpunit>
