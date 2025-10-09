@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser\Enums;
 
-enum GranadeType: string
+enum GrenadeType: string
 {
     case INFERNO = 'inferno';
     case SMOKE = 'smoke';

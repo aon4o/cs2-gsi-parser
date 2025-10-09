@@ -1,0 +1,16 @@
+<?php
+
+namespace Aon4o\Cs2GsiParser\Types;
+
+use Aon4o\Cs2GsiParser\Enums\BombState;
+
+class Bomb
+{
+    public BombState $state;
+
+    public string $position;
+
+    public string|null $player = null;
+
+    public string|null $countdown = null;
+}

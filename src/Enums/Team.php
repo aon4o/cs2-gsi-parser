@@ -6,6 +6,6 @@ namespace Aon4o\Cs2GsiParser\Enums;
 
 enum Team: string
 {
-    case T = 't';
-    case CT = 'ct';
+    case T = 'T';
+    case CT = 'CT';
 }

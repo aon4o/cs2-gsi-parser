@@ -1,0 +1,59 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "no_superfluous_phpdoc_tags": false,
+        "ordered_imports": {
+            "sort_algorithm": "alpha",
+            "imports_order": [
+                "class",
+                "const",
+                "function"
+            ]
+        },
+        "new_with_parentheses": true,
+        "not_operator_with_successor_space": true,
+        "nullable_type_declaration": {
+            "syntax": "union"
+        },
+        "phpdoc_separation": {
+            "groups": [
+                [
+                    "deprecated",
+                    "link",
+                    "see",
+                    "since"
+                ],
+                [
+                    "author",
+                    "copyright",
+                    "license"
+                ],
+                [
+                    "category",
+                    "package",
+                    "subpackage"
+                ],
+                [
+                    "property",
+                    "property-read",
+                    "property-write"
+                ],
+                [
+                    "param"
+                ],
+                [
+                    "return"
+                ]
+            ]
+        },
+        "nullable_type_declaration_for_default_null_value": true
+    },
+    "exclude": [
+        "storage",
+        "public",
+        "modules/Settings/Database/Seeders/Emails"
+    ]
+}

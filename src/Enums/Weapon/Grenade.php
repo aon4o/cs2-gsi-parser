@@ -2,7 +2,7 @@
 
 namespace Aon4o\Cs2GsiParser\Enums\Weapon;
 
-enum Granade: string
+enum Grenade: string
 {
     case SMOKE = 'weapon_smokegrenade';
 
