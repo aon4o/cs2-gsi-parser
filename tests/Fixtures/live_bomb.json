@@ -1,0 +1,59 @@
+{
+    "provider": {
+        "name": "Counter-Strike: Global Offensive",
+        "appid": 730,
+        "version": 14108,
+        "steamid": "76561198067092241",
+        "timestamp": 1759002299
+    },
+    "map": {
+        "mode": "competitive",
+        "name": "de_dust2",
+        "phase": "live",
+        "round": 0,
+        "team_ct": {
+            "score": 0,
+            "consecutive_round_losses": 1,
+            "timeouts_remaining": 1,
+            "matches_won_this_series": 0
+        },
+        "team_t": {
+            "score": 0,
+            "consecutive_round_losses": 1,
+            "timeouts_remaining": 1,
+            "matches_won_this_series": 0
+        },
+        "num_matches_to_win_series": 0
+    },
+    "round": {
+        "phase": "live",
+        "bomb": "planted"
+    },
+    "player": {
+        "steamid": "76561198067092241",
+        "name": "MF BOOM ⛟",
+        "observer_slot": 0,
+        "team": "CT",
+        "activity": "playing",
+        "state": {
+            "health": 79,
+            "armor": 0,
+            "helmet": false,
+            "flashed": 0,
+            "smoked": 0,
+            "burning": 0,
+            "money": 800,
+            "round_kills": 0,
+            "round_killhs": 0,
+            "equip_value": 200
+        }
+    },
+    "added": {
+        "round": {
+            "bomb": "planted"
+        }
+    },
+    "auth": {
+        "token": "CCWJu64ZV3JHDT8hZc"
+    }
+}

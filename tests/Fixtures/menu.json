@@ -1,0 +1,18 @@
+{
+    "provider": {
+        "name": "Counter-Strike: Global Offensive",
+        "appid": 730,
+        "version": 14108,
+        "steamid": "76561198067092241",
+        "timestamp": 1759002159
+    },
+    "player": {
+        "steamid": "76561198067092241",
+        "name": "MF BOOM ⛟",
+        "activity": "menu"
+    },
+    "auth": {
+        "token": "CCWJu64ZV3JHDT8hZc"
+    }
+}
+

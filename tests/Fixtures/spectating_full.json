@@ -1,0 +1,124 @@
+{
+    "provider": {
+        "name": "CSGO",
+        "appid": 730,
+        "version": 14108,
+        "steamid": "76561198000000000",
+        "timestamp": 1759003000
+    },
+    "map": {
+        "mode": "competitive",
+        "name": "de_inferno",
+        "phase": "live",
+        "round": 3,
+        "team_ct": {
+            "score": 2,
+            "consecutive_round_losses": 0,
+            "timeouts_remaining": 1,
+            "matches_won_this_series": 0
+        },
+        "team_t": {
+            "score": 1,
+            "consecutive_round_losses": 1,
+            "timeouts_remaining": 1,
+            "matches_won_this_series": 0
+        },
+        "num_matches_to_win_series": 0,
+        "current_spectators": 5,
+        "souvenirs_total": 0
+    },
+    "round": {
+        "phase": "live",
+        "bomb": "planted"
+    },
+    "allplayers": {
+        "76561198000000001": {
+            "name": "PlayerOne",
+            "observer_slot": 1,
+            "team": "CT",
+            "state": {
+                "health": 100,
+                "armor": 100,
+                "helmet": true,
+                "flashed": 0,
+                "smoked": 0,
+                "burning": 0,
+                "money": 16000,
+                "round_kills": 1,
+                "round_killhs": 1,
+                "equip_value": 5000
+            },
+            "match_stats": {
+                "kills": 5,
+                "assists": 1,
+                "deaths": 2,
+                "mvps": 1,
+                "score": 10
+            },
+            "weapons": {
+                "weapon_0": {
+                    "name": "weapon_ak47",
+                    "paintkit": "default",
+                    "type": "Rifle",
+                    "ammo_clip": 30,
+                    "ammo_clip_max": 30,
+                    "ammo_reserve": 90,
+                    "state": "active"
+                }
+            },
+            "position": "0 0 0",
+            "forward": "0 0 1"
+        },
+        "76561198000000002": {
+            "name": "PlayerTwo",
+            "observer_slot": 2,
+            "team": "T",
+            "state": {
+                "health": 0,
+                "armor": 0,
+                "helmet": false,
+                "flashed": 0,
+                "smoked": 0,
+                "burning": 0,
+                "money": 0,
+                "round_kills": 0,
+                "round_killhs": 0,
+                "equip_value": 0
+            },
+            "match_stats": {
+                "kills": 0,
+                "assists": 0,
+                "deaths": 5,
+                "mvps": 0,
+                "score": 1
+            },
+            "weapons": {},
+            "position": "10 20 30",
+            "forward": "0 1 0"
+        }
+    },
+    "grenades": {
+        "grenade_0": {
+            "name": "frag",
+            "type": "Grenade",
+            "position": "100 200 300"
+        }
+    },
+    "previously": {
+        "player": {
+            "activity": "playing"
+        },
+        "map": {
+            "phase": "warmup"
+        }
+    },
+    "bomb": {
+        "state": "planted",
+        "position": "50 60 70",
+        "player": "76561198000000002",
+        "countdown": "35"
+    },
+    "auth": {
+        "token": "SPECTOKEN"
+    }
+}
