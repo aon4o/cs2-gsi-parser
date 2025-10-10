@@ -9,7 +9,7 @@ use Aon4o\Cs2GsiParser\Types\Map;
 use Aon4o\Cs2GsiParser\Types\Previously;
 use Aon4o\Cs2GsiParser\Types\Round;
 
-class Playing extends BaseState
+class Playing extends GameState
 {
     public Map $map;
 

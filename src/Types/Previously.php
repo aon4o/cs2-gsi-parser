@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser\Types;
 
+use Aon4o\Cs2GsiParser\Traits\ParserConstructor;
 use Aon4o\Cs2GsiParser\Types\Weapon\Grenade;
 
 class Previously
 {
-    // provider?: Provider
-    //    map?: Map
-    //    round?: Round
-    //    player?: Player
-    //    allplayers?: AllPlayers
-    //    phase_countdowns?: Phase
-    //    grenades?: Grenades
-    //    bomb?: BombState
-    //   auth?: Auth
+    use ParserConstructor;
 
     public Provider|null $provider = null;
 

@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// Require Composer's autoloader so we can use composer packages and our classes.
+require_once __DIR__ . '/../vendor/autoload.php';
+
+new Psy\Shell()->run();

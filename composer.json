@@ -19,7 +19,8 @@
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.4",
+        "psy/psysh": "^0.12.12"
     },
     "require-dev": {
         "pestphp/pest": "^4.1",

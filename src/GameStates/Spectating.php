@@ -12,7 +12,7 @@ use Aon4o\Cs2GsiParser\Types\Previously;
 use Aon4o\Cs2GsiParser\Types\Round;
 use Aon4o\Cs2GsiParser\Types\Weapon\Grenade;
 
-class Spectating extends BaseState
+class Spectating extends GameState
 {
     public Map $map;
 

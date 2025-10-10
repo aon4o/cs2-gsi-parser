@@ -6,9 +6,12 @@ namespace Aon4o\Cs2GsiParser\Types;
 
 use Aon4o\Cs2GsiParser\Enums\MapPhase;
 use Aon4o\Cs2GsiParser\Enums\RoundWinType;
+use Aon4o\Cs2GsiParser\Traits\ParserConstructor;
 
 class Map
 {
+    use ParserConstructor;
+
     public string $mode;
 
     public string $name;
