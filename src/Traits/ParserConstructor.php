@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser\Traits;
 
-use Aon4o\Cs2GsiParser\Enums\WeaponType;
 use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionNamedType;
-use Throwable;
-use ValueError;
 
 trait ParserConstructor
 {
@@ -65,106 +62,8 @@ trait ParserConstructor
                     }
 
                     if ($cast !== null) {
-                        try {
-                            $property->setValue($this, $type_name::from($cast));
-                        } catch (ValueError $e) {
-                            // Try special handling for WeaponType: map short codes or sub-enum matches
-                            if ($type_name === 'Aon4o\\Cs2GsiParser\\Enums\\WeaponType') {
-                                $low = strtolower((string) $cast);
-                                $weaponEnums = [
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Grenade',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Rifle',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Pistol',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Shotgun',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\SniperRifle',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\SubmachineGun',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\MachineGun',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Knife',
-                                    'Aon4o\\Cs2GsiParser\\Enums\\Weapon\\Bomb',
-                                ];
+                        $property->setValue($this, $type_name::from($cast));
 
-                                $resolvedWeaponType = null;
-                                foreach ($weaponEnums as $we) {
-                                    if (! enum_exists($we)) {
-                                        continue;
-                                    }
-
-                                    try {
-                                        foreach ($we::cases() as $case) {
-                                            if (strcasecmp($case->name,
-                                                (string) $cast) === 0 || str_contains(strtolower((string) $case->value),
-                                                    $low)) {
-                                                // map enum class basename to WeaponType case name
-                                                $parts = explode('\\\\', $we);
-                                                $basename = end($parts);
-                                                // find corresponding WeaponType case by name
-                                                try {
-                                                    foreach (WeaponType::cases() as $wtcase) {
-                                                        if ($wtcase->name === $basename) {
-                                                            $resolvedWeaponType = $wtcase;
-                                                            break 2;
-                                                        }
-                                                    }
-                                                } catch (Throwable $_) {
-                                                    // ignore
-                                                }
-                                            }
-                                        }
-                                    } catch (Throwable $_) {
-                                        // ignore
-                                    }
-                                }
-
-                                if ($resolvedWeaponType !== null) {
-                                    $property->setValue($this, $resolvedWeaponType);
-
-                                    continue;
-                                }
-                            }
-
-                            // Try fallbacks: preserve existing default, or match by case name/value
-                            $preserved = null;
-                            try {
-                                $preserved = $property->getValue($this);
-                            } catch (Throwable $_) {
-                                $preserved = null;
-                            }
-
-                            if ($preserved !== null) {
-                                // keep existing default value
-                                continue;
-                            }
-
-                            // Try to resolve by enum case name (case-insensitive)
-                            $resolved = null;
-                            try {
-                                foreach ($type_name::cases() as $case) {
-                                    if (strcasecmp($case->name, (string) $cast) === 0) {
-                                        $resolved = $case;
-                                        break;
-                                    }
-                                }
-
-                                // Try matching by contained substring in backing value
-                                if ($resolved === null) {
-                                    $low = strtolower((string) $cast);
-                                    foreach ($type_name::cases() as $case) {
-                                        if (str_contains(strtolower((string) $case->value), $low)) {
-                                            $resolved = $case;
-                                            break;
-                                        }
-                                    }
-                                }
-                            } catch (Throwable $_) {
-                                $resolved = null;
-                            }
-
-                            if ($resolved !== null) {
-                                $property->setValue($this, $resolved);
-                            } elseif ($type->allowsNull()) {
-                                $property->setValue($this, null);
-                            }
-                        }
                     } else {
                         if ($type->allowsNull()) {
                             $property->setValue($this, null);

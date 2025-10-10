@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Aon4o\Cs2GsiParser\GameStates;
 
 use Aon4o\Cs2GsiParser\Types\Bomb;
+use Aon4o\Cs2GsiParser\Types\GranadeState;
 use Aon4o\Cs2GsiParser\Types\Map;
 use Aon4o\Cs2GsiParser\Types\OtherPlayer;
 use Aon4o\Cs2GsiParser\Types\Phase;
 use Aon4o\Cs2GsiParser\Types\Previously;
 use Aon4o\Cs2GsiParser\Types\Round;
-use Aon4o\Cs2GsiParser\Types\Weapon\Grenade;
 
 class Spectating extends GameState
 {
@@ -23,7 +23,7 @@ class Spectating extends GameState
 
     public Phase $phase_countdowns;
 
-    /** @var array<string, Grenade> */
+    /** @var array<string, GranadeState> */
     public array $grenades;
 
     public Previously $previously;
