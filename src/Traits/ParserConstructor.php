@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser\Traits;
 
+use BackedEnum;
 use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
@@ -68,40 +69,38 @@ trait ParserConstructor
      * @param  mixed  $value
      *
      * @return void
+     *
+     * @throws ReflectionException
      */
     protected function handleEnum(ReflectionProperty $property, mixed $value): void
     {
         $type = $property->getType();
+
+        /** @var BackedEnum $type_name */
         $type_name = $type->getName();
 
-        try {
-            $re = new ReflectionEnum($type_name);
-            $backing = $re->getBackingType()->getName();
+        $reflection = new ReflectionEnum($type_name);
+        $backing = $reflection->getBackingType()->getName();
 
-            if ($backing === 'int') {
-                if (is_int($value)) {
-                    $cast = $value;
-                } elseif (is_string($value) && ctype_digit($value)) {
-                    $cast = (int) $value;
-                } else {
-                    $cast = null;
-                }
-            } elseif (is_string($value)) {
-                $cast = $value;
+        if ($backing === 'int') {
+            if (is_int($value)) {
+                $cast_value = $value;
+            } elseif (is_string($value) && ctype_digit($value)) {
+                $cast_value = (int) $value;
             } else {
-                $cast = null;
+                $cast_value = null;
             }
+        } elseif (is_string($value)) {
+            $cast_value = $value;
+        } else {
+            $cast_value = null;
+        }
 
-            if ($cast !== null) {
-                $property->setValue($this, $type_name::from($cast));
+        if ($cast_value !== null) {
+            $property->setValue($this, $type_name::from($cast_value));
 
-            } elseif ($type->allowsNull()) {
-                $property->setValue($this, null);
-            }
-        } catch (ReflectionException) {
-            if ($type->allowsNull()) {
-                $property->setValue($this, null);
-            }
+        } elseif ($type->allowsNull()) {
+            $property->setValue($this, null);
         }
     }
 
@@ -119,9 +118,7 @@ trait ParserConstructor
         if (is_object($value)) {
             $property->setValue($this, new $type_name($value));
         } elseif (is_array($value)) {
-            // convert associative arrays into stdClass so constructors expecting object work
-            $obj = json_decode(json_encode($value));
-            $property->setValue($this, new $type_name($obj));
+            $property->setValue($this, new $type_name($value));
         } elseif ($type->allowsNull()) {
             $property->setValue($this, null);
         }
@@ -141,97 +138,103 @@ trait ParserConstructor
         $value,
         ReflectionClass $reflection,
     ): void {
-        if ($type_name === 'int') {
-            $property->setValue($this, (int) $value);
-        } elseif ($type_name === 'float') {
-            $property->setValue($this, (float) $value);
-        } elseif ($type_name === 'bool') {
-            $property->setValue($this, (bool) $value);
-        } elseif ($type_name === 'string') {
-            $property->setValue($this, (string) $value);
-        } elseif ($type_name === 'array') {
-            // Attempt to detect an element class via the @var docblock for arrays
-            $doc = $property->getDocComment();
-            $elemClass = null;
+        match ($type_name) {
+            'int' => $property->setValue($this, (int) $value),
+            'float' => $property->setValue($this, (float) $value),
+            'bool' => $property->setValue($this, (bool) $value),
+            'string' => $property->setValue($this, (string) $value),
+            'array' => $this->handleBuiltInArray($property, $reflection, $value),
+            'default' => $property->setValue($this, $value),
+        };
+    }
 
-            if ($doc !== false) {
-                $matches = [];
-                if (preg_match('/@var\\s+array<[^,>]+,\\s*([\\\\A-Za-z0-9_]+)>/', $doc, $matches)) {
-                    $short = $matches[1];
+    /**
+     * @param  ReflectionProperty  $property
+     * @param  ReflectionClass  $reflection
+     * @param  $value
+     *
+     * @return void
+     */
+    protected function handleBuiltInArray(ReflectionProperty $property, ReflectionClass $reflection, $value): void
+    {
+        $doc = $property->getDocComment();
+        $elemClass = null;
 
-                    // try several candidate namespaces to resolve the short class name
-                    $candidates = [
-                        $short,
-                        '\\' . $short,
-                        $reflection->getNamespaceName() . '\\' . $short,
-                        'Aon4o\\Cs2GsiParser\\Types\\' . $short,
-                        'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . $short,
-                    ];
+        if ($doc !== false) {
+            $matches = [];
+            if (preg_match('/@var\\s+array<[^,>]+,\\s*([\\\\A-Za-z0-9_]+)>/', $doc, $matches)) {
+                $short = $matches[1];
 
-                    foreach ($candidates as $cand) {
-                        if (class_exists($cand)) {
-                            $elemClass = $cand;
-                            break;
-                        }
+                // try several candidate namespaces to resolve the short class name
+                $candidates = [
+                    $short,
+                    '\\' . $short,
+                    $reflection->getNamespaceName() . '\\' . $short,
+                    'Aon4o\\Cs2GsiParser\\Types\\' . $short,
+                    'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . $short,
+                ];
+
+                foreach ($candidates as $cand) {
+                    if (class_exists($cand)) {
+                        $elemClass = $cand;
+                        break;
                     }
                 }
             }
+        }
 
-            if ($elemClass !== null && (is_array($value) || is_object($value))) {
-                $out = [];
-                foreach ((array) $value as $k => $v) {
-                    if (is_object($v) || is_array($v)) {
-                        $vobj = is_array($v) ? json_decode(json_encode($v)) : $v;
+        if ($elemClass !== null && (is_array($value) || is_object($value))) {
+            $out = [];
+            foreach ((array) $value as $k => $v) {
+                if (is_object($v) || is_array($v)) {
+                    $vobj = is_array($v) ? json_decode(json_encode($v)) : $v;
 
-                        $instClass = $elemClass;
+                    $instClass = $elemClass;
 
-                        // if the element class is abstract (e.g. Weapon), try to resolve a concrete subclass
-                        try {
-                            $rc = new ReflectionClass($elemClass);
-                            if ($rc->isAbstract()) {
-                                // try to resolve from a 'type' property (common in weapon objects)
-                                if (isset($vobj->type) && is_string($vobj->type)) {
-                                    $candidate = 'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . ucfirst($vobj->type);
+                    // if the element class is abstract (e.g. Weapon), try to resolve a concrete subclass
+                    try {
+                        $rc = new ReflectionClass($elemClass);
+                        if ($rc->isAbstract()) {
+                            // try to resolve from a 'type' property (common in weapon objects)
+                            if (isset($vobj->type) && is_string($vobj->type)) {
+                                $candidate = 'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . ucfirst($vobj->type);
 
+                                if (class_exists($candidate)) {
+                                    $instClass = $candidate;
+                                }
+                            }
+
+                            // as a fallback, try short class name mapping
+                            if ($instClass === $elemClass) {
+                                $short = (is_string($vobj->type) ? $vobj->type : null);
+                                if ($short) {
+                                    $candidate = 'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . ucfirst($short);
                                     if (class_exists($candidate)) {
                                         $instClass = $candidate;
                                     }
                                 }
-
-                                // as a fallback, try short class name mapping
-                                if ($instClass === $elemClass) {
-                                    $short = (is_string($vobj->type) ? $vobj->type : null);
-                                    if ($short) {
-                                        $candidate = 'Aon4o\\Cs2GsiParser\\Types\\Weapon\\' . ucfirst($short);
-                                        if (class_exists($candidate)) {
-                                            $instClass = $candidate;
-                                        }
-                                    }
-                                }
-
-                                // If still abstract or not instantiable, fallback to leaving the element as raw object/array
-                                if (! class_exists($instClass) || new ReflectionClass($instClass)->isAbstract()) {
-                                    $out[$k] = $vobj;
-
-                                    continue;
-                                }
                             }
-                        } catch (ReflectionException $e) {
-                            // ignore and use elemClass
+
+                            // If still abstract or not instantiable, fallback to leaving the element as raw object/array
+                            if (! class_exists($instClass) || new ReflectionClass($instClass)->isAbstract()) {
+                                $out[$k] = $vobj;
+
+                                continue;
+                            }
                         }
-
-                        $out[$k] = new $instClass($vobj);
-                    } else {
-                        $out[$k] = $v;
+                    } catch (ReflectionException $e) {
+                        // ignore and use elemClass
                     }
-                }
 
-                $property->setValue($this, $out);
-            } else {
-                $property->setValue($this, (array) $value);
+                    $out[$k] = new $instClass($vobj);
+                } else {
+                    $out[$k] = $v;
+                }
             }
+
+            $property->setValue($this, $out);
         } else {
-            $property->setValue($this, $value);
+            $property->setValue($this, (array) $value);
         }
     }
 }
