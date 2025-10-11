@@ -1,4 +1,4 @@
-name: Type Coverage
+name: Rector
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Type Coverage
+    name: Rector
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -28,5 +28,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
 
-      - name: Type coverage
-        run: composer types
+      - name: Rector
+        run: composer refactor:test
