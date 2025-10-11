@@ -11,11 +11,11 @@ use Aon4o\Cs2GsiParser\Types\Team;
 beforeEach()->group('unit');
 
 test('grenade type helper methods', function () {
-    expect(GrenadeType::DECOY->isDecoySmoke())->toBeTrue();
-    expect(GrenadeType::SMOKE->isDecoySmoke())->toBeTrue();
-    expect(GrenadeType::FRAG->isDefault())->toBeTrue();
-    expect(GrenadeType::FLASH_BANG->isDefault())->toBeTrue();
-    expect(GrenadeType::INFERNO->isFireBomb())->toBeTrue();
+    expect(GrenadeType::DECOY->isDecoySmoke())->toBeTrue()
+        ->and(GrenadeType::SMOKE->isDecoySmoke())->toBeTrue()
+        ->and(GrenadeType::FRAG->isDefault())->toBeTrue()
+        ->and(GrenadeType::FLASH_BANG->isDefault())->toBeTrue()
+        ->and(GrenadeType::INFERNO->isFireBomb())->toBeTrue();
 });
 
 test('player observer_slot accepts numeric string and maps to ObservatorSlot', function () {
@@ -23,17 +23,18 @@ test('player observer_slot accepts numeric string and maps to ObservatorSlot', f
 
     $player = new Player($obj);
 
-    expect($player->observer_slot)->toBeInstanceOf(ObservatorSlot::class);
-    expect($player->observer_slot->value)->toBe(1);
+    expect($player->observer_slot)->toBeInstanceOf(ObservatorSlot::class)
+        ->and($player->observer_slot->value)->toBe(1);
 });
 
 test('team casts numeric strings to ints', function () {
     $team = new Team(json_decode(json_encode([
-        'score' => '5', 'consecutive_round_losses' => '2', 'timeouts_remaining' => '1', 'matches_won_this_series' => '0',
+        'score' => '5', 'consecutive_round_losses' => '2', 'timeouts_remaining' => '1',
+        'matches_won_this_series' => '0',
     ])));
 
-    expect($team->score)->toBeInt()->toBe(5);
-    expect($team->consecutive_round_losses)->toBeInt()->toBe(2);
+    expect($team->score)->toBeInt()->toBe(5)
+        ->and($team->consecutive_round_losses)->toBeInt()->toBe(2);
 });
 
 test('bomb maps state enum and keeps other fields', function () {
@@ -43,8 +44,8 @@ test('bomb maps state enum and keeps other fields', function () {
 
     $bomb = new Bomb($obj);
 
-    expect($bomb->state)->not->toBeNull();
-    expect($bomb->state->value)->toBe('planted');
-    expect($bomb->position)->toBe('10 20 30');
-    expect($bomb->player)->toBe('765');
+    expect($bomb->state)->not->toBeNull()
+        ->and($bomb->state->value)->toBe('planted')
+        ->and($bomb->position)->toBe('10 20 30')
+        ->and($bomb->player)->toBe('765');
 });

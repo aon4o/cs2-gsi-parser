@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use Aon4o\Cs2GsiParser\GameStates\Menu;
-use Aon4o\Cs2GsiParser\GameStates\Playing;
-use Aon4o\Cs2GsiParser\GameStates\Spectating;
+use Aon4o\Cs2GsiParser\Enums\Custom\GameStateType;
 use Aon4o\Cs2GsiParser\GSIParser;
 
 beforeEach()->group('parser');
@@ -14,9 +12,9 @@ test('parse from json string returns Menu', function () {
 
     $gs = GSIParser::parse($json);
 
-    expect($gs)->toBeInstanceOf(Menu::class);
-    expect($gs->provider->appid)->toBe(730);
-    expect($gs->player->activity->value)->toBe('menu');
+    expect($gs->type())->toBe(GameStateType::MENU)
+        ->and($gs->provider->appid)->toBe(730)
+        ->and($gs->player->activity->value)->toBe('menu');
 });
 
 test('parse from array returns Playing (warmup)', function () {
@@ -24,8 +22,8 @@ test('parse from array returns Playing (warmup)', function () {
 
     $gs = GSIParser::parse($array);
 
-    expect($gs)->toBeInstanceOf(Playing::class);
-    expect($gs->map->phase->value)->toBe('warmup');
+    expect($gs->type())->toBe(GameStateType::PLAYING)
+        ->and($gs->map->phase->value)->toBe('warmup');
 });
 
 test('parse from object returns Playing (freezetime)', function () {
@@ -33,9 +31,9 @@ test('parse from object returns Playing (freezetime)', function () {
 
     $gs = GSIParser::parse($obj);
 
-    expect($gs)->toBeInstanceOf(Playing::class);
-    expect($gs->round->phase->value)->toBe('freezetime');
-    expect($gs->player->activity->value)->toBe('textinput');
+    expect($gs->type())->toBe(GameStateType::PLAYING)
+        ->and($gs->round->phase->value)->toBe('freezetime')
+        ->and($gs->player->activity->value)->toBe('textinput');
 });
 
 test('parse live bomb payload returns Playing with planted bomb', function () {
@@ -43,9 +41,9 @@ test('parse live bomb payload returns Playing with planted bomb', function () {
 
     $gs = GSIParser::parse($obj);
 
-    expect($gs)->toBeInstanceOf(Playing::class);
-    expect($gs->round->bomb->value)->toBe('planted');
-    expect($gs->added)->not->toBeNull();
+    expect($gs->type())->toBe(GameStateType::PLAYING)
+        ->and($gs->round->bomb->value)->toBe('planted')
+        ->and($gs->added)->not->toBeNull();
 });
 
 // New test to exercise Spectating and many types
@@ -54,40 +52,40 @@ test('parse spectating payload returns Spectating and populates complex types', 
 
     $gs = GSIParser::parse($obj);
 
-    expect($gs)->toBeInstanceOf(Spectating::class);
+    expect($gs->type())->toBe(GameStateType::SPECTATING)
+        ->and($gs->map->name)->toBe('de_inferno')
+        ->and($gs->map->current_spectators)->toBe(5)
+        ->and($gs->round->phase->value)->toBe('live')
+        ->and($gs->round->bomb->value)->toBe('planted')
+        ->and($gs->bomb->state->value)->toBe('planted')
+        ->and($gs->bomb->position)->toBe('50 60 70')
+        ->and(is_array($gs->allplayers))->toBeTrue();
 
     // map
-    expect($gs->map->name)->toBe('de_inferno');
-    expect($gs->map->current_spectators)->toBe(5);
 
     // round and bomb
-    expect($gs->round->phase->value)->toBe('live');
-    expect($gs->round->bomb->value)->toBe('planted');
-    expect($gs->bomb->state->value)->toBe('planted');
-    expect($gs->bomb->position)->toBe('50 60 70');
 
     // allplayers
-    expect(is_array($gs->allplayers))->toBeTrue();
     $keys = array_keys((array) $gs->allplayers);
     expect(count($keys))->toBeGreaterThanOrEqual(2);
 
     // check a specific player
     $playerOne = $gs->allplayers['76561198000000001'];
-    expect($playerOne->name)->toBe('PlayerOne');
-    expect($playerOne->state->health)->toBe(100);
+    expect($playerOne->name)->toBe('PlayerOne')
+        ->and($playerOne->state->health)->toBe(100)
+        ->and($playerOne->weapons['weapon_0']->name->value)->toBe('weapon_ak47')
+        ->and(is_array($gs->grenades))->toBeTrue();
     // weapon name is an enum; assert its backing value
-    expect($playerOne->weapons['weapon_0']->name->value)->toBe('weapon_ak47');
 
     // grenades
-    expect(is_array($gs->grenades))->toBeTrue();
     $grenade = $gs->grenades['grenade_0'];
     // grenade name is an enum; assert case name or backing value
-    expect($grenade->name->name)->toBe('FRAG');
+    expect($grenade->name->name)->toBe('FRAG')
+        ->and($gs->previously->map->phase->value)->toBe('warmup')
+        ->and($gs->previously->player->activity->value)->toBe('playing')
+        ->and($gs->auth->token)->toBe('SPECTOKEN');
 
     // previously
-    expect($gs->previously->map->phase->value)->toBe('warmup');
-    expect($gs->previously->player->activity->value)->toBe('playing');
 
     // auth
-    expect($gs->auth->token)->toBe('SPECTOKEN');
 });

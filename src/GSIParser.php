@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser;
 
-use Aon4o\Cs2GsiParser\GameStates\Menu;
-use Aon4o\Cs2GsiParser\GameStates\Playing;
-use Aon4o\Cs2GsiParser\GameStates\Spectating;
 use InvalidArgumentException;
+use ReflectionException;
 
 class GSIParser
 {
     /**
      * @param  mixed  $data
      *
-     * @return Menu|Playing|Spectating
+     * @return GameState
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
-    public static function parse(mixed $data = null): Menu|Playing|Spectating
+    public static function parse(mixed $data = null): GameState
     {
         $data_type = gettype($data);
 
@@ -30,26 +29,27 @@ class GSIParser
         };
     }
 
-    public static function fromJSON(string $data): Menu|Playing|Spectating
+    /**
+     * @throws ReflectionException
+     */
+    public static function fromJSON(string $data): GameState
     {
         return self::fromArray(json_decode($data, true));
     }
 
-    public static function fromArray(array $data): Menu|Playing|Spectating
+    /**
+     * @throws ReflectionException
+     */
+    public static function fromArray(array $data): GameState
     {
         return self::fromObject(json_decode(json_encode($data)));
     }
 
-    public static function fromObject(object $data): Menu|Playing|Spectating
+    /**
+     * @throws ReflectionException
+     */
+    public static function fromObject(object $data): GameState
     {
-        if (isset($data->allplayers) && $data->allplayers) {
-            return new Spectating($data);
-        }
-
-        if (isset($data->map) && $data->map) {
-            return new Playing($data);
-        }
-
-        return new Menu($data);
+        return new GameState($data);
     }
 }
