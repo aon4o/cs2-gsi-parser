@@ -27,7 +27,7 @@ test('fluent setters and text contains values', function () {
 
     $w->setAuthToken('secret')->setName('my-name');
 
-    $text = $w->text();
+    $text = $w->get();
 
     expect($text)->toContain('"uri" "http://example.test"')
         ->and($text)->toContain('"token" "secret"')
@@ -38,7 +38,7 @@ test('setSettings reflects in text', function () {
     $w = new GSIConfigWriter();
     $w->setSettings(2.5, 0.25, 0.75, 12.5);
 
-    $text = $w->text();
+    $text = $w->get();
 
     expect($text)->toContain('"timeout" "2.5"')
         ->and($text)->toContain('"buffer"')
@@ -71,7 +71,7 @@ test('setData reflects flags in text', function () {
         true,   // player_position
     );
 
-    $text = $w->text();
+    $text = $w->get();
 
     expect($text)->toContain('"map_round_wins" "0"')
         ->and($text)->toContain('"map" "1"')
