@@ -8,7 +8,7 @@ use Aon4o\Cs2GsiParser\GSIParser;
 beforeEach()->group('parser');
 
 test('parse from json string returns Menu', function () {
-    $json = file_get_contents(__DIR__ . '/../Fixtures/menu.json');
+    $json = loadFixture('menu');
 
     $gs = GSIParser::parse($json);
 
@@ -18,7 +18,7 @@ test('parse from json string returns Menu', function () {
 });
 
 test('parse from array returns Playing (warmup)', function () {
-    $array = json_decode(file_get_contents(__DIR__ . '/../Fixtures/warmup.json'), true);
+    $array = json_decode(loadFixture('warmup'), true);
 
     $gs = GSIParser::parse($array);
 
@@ -27,7 +27,7 @@ test('parse from array returns Playing (warmup)', function () {
 });
 
 test('parse from object returns Playing (freezetime)', function () {
-    $obj = json_decode(file_get_contents(__DIR__ . '/../Fixtures/freezetime.json'));
+    $obj = json_decode(loadFixture('freezetime'));
 
     $gs = GSIParser::parse($obj);
 
@@ -37,7 +37,7 @@ test('parse from object returns Playing (freezetime)', function () {
 });
 
 test('parse live bomb payload returns Playing with planted bomb', function () {
-    $obj = json_decode(file_get_contents(__DIR__ . '/../Fixtures/live_bomb.json'));
+    $obj = json_decode(loadFixture('live_bomb'));
 
     $gs = GSIParser::parse($obj);
 
@@ -48,7 +48,7 @@ test('parse live bomb payload returns Playing with planted bomb', function () {
 
 // New test to exercise Spectating and many types
 test('parse spectating payload returns Spectating and populates complex types', function () {
-    $obj = json_decode(file_get_contents(__DIR__ . '/../Fixtures/spectating_full.json'));
+    $obj = json_decode(loadFixture('spectating_full'));
 
     $gs = GSIParser::parse($obj);
 

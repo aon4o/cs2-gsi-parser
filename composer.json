@@ -31,7 +31,10 @@
     "autoload": {
         "psr-4": {
             "Aon4o\\Cs2GsiParser\\": "src"
-        }
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
