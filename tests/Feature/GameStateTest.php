@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Aon4o\Cs2GsiParser\Enums\Custom\GameStateType;
-use Aon4o\Cs2GsiParser\GSIParser;
+use Aon4o\Cs2GsiParser\GameState;
 
 beforeEach()->group('parser');
 
 test('parse from json string returns Menu', function () {
     $json = loadFixture('menu');
 
-    $gs = GSIParser::parse($json);
+    $gs = GameState::from($json);
 
     expect($gs->type())->toBe(GameStateType::MENU)
         ->and($gs->provider->appid)->toBe(730)
@@ -20,7 +20,7 @@ test('parse from json string returns Menu', function () {
 test('parse from array returns Playing (warmup)', function () {
     $array = json_decode(loadFixture('warmup'), true);
 
-    $gs = GSIParser::parse($array);
+    $gs = GameState::from($array);
 
     expect($gs->type())->toBe(GameStateType::PLAYING)
         ->and($gs->map->phase->value)->toBe('warmup');
@@ -29,7 +29,7 @@ test('parse from array returns Playing (warmup)', function () {
 test('parse from object returns Playing (freezetime)', function () {
     $obj = json_decode(loadFixture('freezetime'));
 
-    $gs = GSIParser::parse($obj);
+    $gs = GameState::from($obj);
 
     expect($gs->type())->toBe(GameStateType::PLAYING)
         ->and($gs->round->phase->value)->toBe('freezetime')
@@ -39,7 +39,7 @@ test('parse from object returns Playing (freezetime)', function () {
 test('parse live bomb payload returns Playing with planted bomb', function () {
     $obj = json_decode(loadFixture('live_bomb'));
 
-    $gs = GSIParser::parse($obj);
+    $gs = GameState::from($obj);
 
     expect($gs->type())->toBe(GameStateType::PLAYING)
         ->and($gs->round->bomb->value)->toBe('planted')
@@ -50,7 +50,7 @@ test('parse live bomb payload returns Playing with planted bomb', function () {
 test('parse spectating payload returns Spectating and populates complex types', function () {
     $obj = json_decode(loadFixture('spectating_full'));
 
-    $gs = GSIParser::parse($obj);
+    $gs = GameState::from($obj);
 
     expect($gs->type())->toBe(GameStateType::SPECTATING)
         ->and($gs->map->name)->toBe('de_inferno')

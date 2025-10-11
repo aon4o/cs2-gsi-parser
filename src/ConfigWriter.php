@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser;
 
-class GSIConfigWriter
+class ConfigWriter
 {
     public string $url = 'http://localhost:8000';
 
@@ -45,26 +45,26 @@ class GSIConfigWriter
         'player_position' => true,
     ];
 
-    public static function new(): GSIConfigWriter
+    public static function new(): ConfigWriter
     {
         return new self();
     }
 
-    public function setUrl(string $url): GSIConfigWriter
+    public function setUrl(string $url): ConfigWriter
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function setAuthToken(string $token): GSIConfigWriter
+    public function setAuthToken(string $token): ConfigWriter
     {
         $this->auth_token = $token;
 
         return $this;
     }
 
-    public function setName(string $name): GSIConfigWriter
+    public function setName(string $name): ConfigWriter
     {
         $this->name = $name;
 
@@ -76,7 +76,7 @@ class GSIConfigWriter
         float|null $buffer = null,
         float|null $throttle = null,
         float|null $heartbeat = null,
-    ): GSIConfigWriter {
+    ): ConfigWriter {
         if ($timeout !== null) {
             $this->settings['timeout'] = $timeout;
         }
@@ -114,7 +114,7 @@ class GSIConfigWriter
         bool $bomb = true,
         bool $phase_countdowns = true,
         bool $player_position = true,
-    ): GSIConfigWriter {
+    ): ConfigWriter {
         $this->data = [
             'map_round_wins' => $map_round_wins,
             'map' => $map,

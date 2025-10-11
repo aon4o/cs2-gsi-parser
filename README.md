@@ -29,15 +29,15 @@ composer require aon4o/cs2-gsi-parser
 
 ### Parser
 
-The parser class accepts a JSON string, an associative array or an object.
+The GameState::from() function accepts a JSON string, an associative array or an object.
 
 The result you get back is a fully typed object representing the game state.
 
 ```php
-use Aon4o\Cs2GsiParser\GSIParser;
+use Aon4o\Cs2GsiParser\GameState;
 
 /** @var string|array|object $data */
-$game_state = GSIParser::parse($data);
+$game_state = GameState::from($data);
 
 echo $game_state->map->name; // de_dust2
 ```
@@ -47,9 +47,9 @@ echo $game_state->map->name; // de_dust2
 You can also generate a config file for CS2 GSI.
 
 ```php
-use Aon4o\Cs2GsiParser\GSIConfigWriter;
+use Aon4o\Cs2GsiParser\ConfigWriter;
 
-$config = GSIConfigWriter::new()
+$config = ConfigWriter::new()
     ->setUrl('http://yourdomain.com/cs2-gsi-endpoint')
     ->setAuthToken('your_auth_key')
     ->setSettings(timeout: 5.0, buffer: 0.1, throttle: 0.1, heartbeat: 30.0)
@@ -98,15 +98,15 @@ The events are defined in the `Aon4o\Cs2GsiParser\Enums\Custom\Event` enum.
 
 ```php
 use Aon4o\Cs2GsiParser\GameState;
-use Aon4o\Cs2GsiParser\GSIEventExtractor;
+use Aon4o\Cs2GsiParser\EventExtractor;
 
 /** @var GameState $prev */
 /** @var GameState $curr */
 
-new GSIEventExtractor($prev, $curr)->allEvents();
-new GSIEventExtractor($prev, $curr)->mapEvents();
-new GSIEventExtractor($prev, $curr)->playerEvents();
-new GSIEventExtractor($prev, $curr)->roundEvents();
+new EventExtractor($prev, $curr)->allEvents();
+new EventExtractor($prev, $curr)->mapEvents();
+new EventExtractor($prev, $curr)->playerEvents();
+new EventExtractor($prev, $curr)->roundEvents();
 
 // Example output
 

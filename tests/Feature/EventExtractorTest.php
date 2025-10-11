@@ -3,44 +3,44 @@
 declare(strict_types=1);
 
 use Aon4o\Cs2GsiParser\Enums\Custom\Event;
-use Aon4o\Cs2GsiParser\GSIEventExtractor;
-use Aon4o\Cs2GsiParser\GSIParser;
+use Aon4o\Cs2GsiParser\EventExtractor;
+use Aon4o\Cs2GsiParser\GameState;
 
 beforeEach()->group('extractor');
 
 test('mapEvents detects map phase change between warmup and freezetime', function () {
-    $previous = GSIParser::parse(loadFixture('warmup'));
-    $current = GSIParser::parse(loadFixture('freezetime'));
+    $previous = GameState::from(loadFixture('warmup'));
+    $current = GameState::from(loadFixture('freezetime'));
 
-    $extractor = new GSIEventExtractor($previous, $current);
+    $extractor = new EventExtractor($previous, $current);
 
     expect($extractor->mapEvents())->toContain(Event::MAP_PHASE_CHANGED);
 });
 
 test('playerEvents detects player activity and player state changes', function () {
-    $previous = GSIParser::parse(loadFixture('warmup'));
-    $current = GSIParser::parse(loadFixture('freezetime'));
+    $previous = GameState::from(loadFixture('warmup'));
+    $current = GameState::from(loadFixture('freezetime'));
 
-    $extractor = new GSIEventExtractor($previous, $current);
+    $extractor = new EventExtractor($previous, $current);
 
     expect($extractor->playerEvents())->toContain(Event::PLAYER_ACTIVITY_CHANGED)
         ->and($extractor->playerEvents())->toContain(Event::PLAYER_HP_CHANGED);
 });
 
 test('roundEvents detects round phase change', function () {
-    $previous = GSIParser::parse(loadFixture('warmup'));
-    $current = GSIParser::parse(loadFixture('freezetime'));
+    $previous = GameState::from(loadFixture('warmup'));
+    $current = GameState::from(loadFixture('freezetime'));
 
-    $extractor = new GSIEventExtractor($previous, $current);
+    $extractor = new EventExtractor($previous, $current);
 
     expect($extractor->roundEvents())->toContain(Event::ROUND_PHASE_CHANGED);
 });
 
 test('allEvents merges events from map, player and round differs', function () {
-    $previous = GSIParser::parse(loadFixture('warmup'));
-    $current = GSIParser::parse(loadFixture('freezetime'));
+    $previous = GameState::from(loadFixture('warmup'));
+    $current = GameState::from(loadFixture('freezetime'));
 
-    $extractor = new GSIEventExtractor($previous, $current);
+    $extractor = new EventExtractor($previous, $current);
 
     $all = $extractor->allEvents();
 
@@ -50,9 +50,9 @@ test('allEvents merges events from map, player and round differs', function () {
 });
 
 test('no events when comparing identical states', function () {
-    $gs = GSIParser::parse(loadFixture('freezetime'));
+    $gs = GameState::from(loadFixture('freezetime'));
 
-    $extractor = new GSIEventExtractor($gs, $gs);
+    $extractor = new EventExtractor($gs, $gs);
 
     expect($extractor->allEvents())->toBeEmpty();
 });

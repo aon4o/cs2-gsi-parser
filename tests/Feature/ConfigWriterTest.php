@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Aon4o\Cs2GsiParser\GSIConfigWriter;
+use Aon4o\Cs2GsiParser\ConfigWriter;
 
 beforeEach()->group('writer');
 
 test('defaults', function () {
-    $writer = new GSIConfigWriter();
+    $writer = new ConfigWriter();
 
     expect($writer->url)->toBe('http://localhost:8000')
         ->and($writer->auth_token)->toBe('')
@@ -20,7 +20,7 @@ test('defaults', function () {
 });
 
 test('fluent setters and text contains values', function () {
-    $w = GSIConfigWriter::new();
+    $w = ConfigWriter::new();
     $ret = $w->setUrl('http://example.test');
 
     expect($ret)->toBe($w);
@@ -35,7 +35,7 @@ test('fluent setters and text contains values', function () {
 });
 
 test('setSettings reflects in text', function () {
-    $w = new GSIConfigWriter();
+    $w = new ConfigWriter();
     $w->setSettings(2.5, 0.25, 0.75, 12.5);
 
     $text = $w->get();
@@ -48,7 +48,7 @@ test('setSettings reflects in text', function () {
 });
 
 test('setData reflects flags in text', function () {
-    $w = new GSIConfigWriter();
+    $w = new ConfigWriter();
 
     // setData signature requires 17 booleans; supply a mix
     $w->setData(

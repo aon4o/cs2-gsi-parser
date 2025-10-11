@@ -17,6 +17,8 @@ use Aon4o\Cs2GsiParser\Types\Player;
 use Aon4o\Cs2GsiParser\Types\Previously;
 use Aon4o\Cs2GsiParser\Types\Provider;
 use Aon4o\Cs2GsiParser\Types\Round;
+use InvalidArgumentException;
+use ReflectionException;
 
 class GameState
 {
@@ -45,6 +47,27 @@ class GameState
     public array|null $grenades = null;
 
     public Bomb|null $bomb = null;
+
+    /**
+     * @param  mixed  $data
+     *
+     * @return GameState
+     *
+     * @throws ReflectionException
+     */
+    public static function from(mixed $data): GameState
+    {
+        $data_type = gettype($data);
+
+        $data = match ($data_type) {
+            'string' => json_decode(json_encode(json_decode($data, true))),
+            'array' => json_decode(json_encode($data)),
+            'object' => $data,
+            default => throw new InvalidArgumentException('Invalid data type: ' . $data_type),
+        };
+
+        return new self($data);
+    }
 
     public function type(): GameStateType
     {

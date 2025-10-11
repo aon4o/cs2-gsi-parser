@@ -10,7 +10,7 @@ use Aon4o\Cs2GsiParser\Differs\PlayerStateDiffer;
 use Aon4o\Cs2GsiParser\Differs\RoundDiffer;
 use Aon4o\Cs2GsiParser\Enums\Custom\Event;
 
-class GSIEventExtractor
+class EventExtractor
 {
     public function __construct(public GameState $previous, public GameState $current) {}
 
