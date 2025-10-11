@@ -12,7 +12,7 @@ abstract class BaseDiffer
     /**
      * @var array<string, Event>
      */
-    public const FIELDS = [];
+    public const array FIELDS = [];
 
     /**
      * @param  GameState  $previous

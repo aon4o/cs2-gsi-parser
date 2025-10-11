@@ -75,7 +75,7 @@ if (! function_exists('value')) {
      *
      * @return TValue
      */
-    function value($value, ...$args)
+    function value(mixed $value, ...$args)
     {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
