@@ -90,6 +90,35 @@ echo $config;
 // }
 ```
 
+### Event Extractor
+
+The package also provides a custom event extractor.
+This is not a feature of CS2 GSI, but a custom definition of events based on changes in the game state.
+The events are defined in the `Aon4o\Cs2GsiParser\Enums\Custom\Event` enum.
+
+```php
+use Aon4o\Cs2GsiParser\GameState;
+use Aon4o\Cs2GsiParser\GSIEventExtractor;
+
+/** @var GameState $prev */
+/** @var GameState $curr */
+
+new GSIEventExtractor($prev, $curr)->allEvents();
+new GSIEventExtractor($prev, $curr)->mapEvents();
+new GSIEventExtractor($prev, $curr)->playerEvents();
+new GSIEventExtractor($prev, $curr)->roundEvents();
+
+// Example output
+
+ array:1 [                                                                                                                                                                                      
+    0 => Aon4o\Cs2GsiParser\Enums\Custom\Event {#741                                                                                                                                             
+      +name: "MAP_PHASE_CHANGED"                                                                                                                                                                 
+      +value: "map.phase_changed"                                                                                                                                                                
+    }                                                                                                                                                                                            
+  ]  
+
+```
+
 ## Testing
 
 ```bash
