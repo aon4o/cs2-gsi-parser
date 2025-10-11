@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Aon4o\Cs2GsiParser;
 
-use Aon4o\Cs2GsiParser\GameStates\GameState;
 use Aon4o\Cs2GsiParser\GameStates\Menu;
 use Aon4o\Cs2GsiParser\GameStates\Playing;
 use Aon4o\Cs2GsiParser\GameStates\Spectating;
@@ -15,11 +14,11 @@ class GSIParser
     /**
      * @param  mixed  $data
      *
-     * @return GameState
+     * @return Menu|Playing|Spectating
      *
      * @throws InvalidArgumentException
      */
-    public static function parse(mixed $data = null): GameState
+    public static function parse(mixed $data = null): Menu|Playing|Spectating
     {
         $data_type = gettype($data);
 
@@ -31,17 +30,17 @@ class GSIParser
         };
     }
 
-    public static function fromJSON(string $data): GameState
+    public static function fromJSON(string $data): Menu|Playing|Spectating
     {
         return self::fromArray(json_decode($data, true));
     }
 
-    public static function fromArray(array $data): GameState
+    public static function fromArray(array $data): Menu|Playing|Spectating
     {
         return self::fromObject(json_decode(json_encode($data)));
     }
 
-    public static function fromObject(object $data): GameState
+    public static function fromObject(object $data): Menu|Playing|Spectating
     {
         if (isset($data->allplayers) && $data->allplayers) {
             return new Spectating($data);
