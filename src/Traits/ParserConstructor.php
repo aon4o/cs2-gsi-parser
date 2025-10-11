@@ -222,7 +222,7 @@ trait ParserConstructor
                                 continue;
                             }
                         }
-                    } catch (ReflectionException $e) {
+                    } catch (ReflectionException) {
                         // ignore and use elemClass
                     }
 

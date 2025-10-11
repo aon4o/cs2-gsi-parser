@@ -45,8 +45,6 @@ class GSIConfigWriter
         'player_position' => true,
     ];
 
-    public function __construct() {}
-
     public static function new(): GSIConfigWriter
     {
         return new self();
@@ -82,12 +80,15 @@ class GSIConfigWriter
         if ($timeout !== null) {
             $this->settings['timeout'] = $timeout;
         }
+
         if ($buffer !== null) {
             $this->settings['buffer'] = $buffer;
         }
+
         if ($throttle !== null) {
             $this->settings['throttle'] = $throttle;
         }
+
         if ($heartbeat !== null) {
             $this->settings['heartbeat'] = $heartbeat;
         }
@@ -168,8 +169,6 @@ EOT;
     }
 EOT;
 
-        $config .= "\n}\n";
-
-        return $config;
+        return $config . "\n}\n";
     }
 }

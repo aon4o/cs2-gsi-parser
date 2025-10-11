@@ -32,5 +32,5 @@ class PlayerState
 
     public int $equip_value;
 
-    public bool|null $defusekit;
+    public bool|null $defusekit = null;
 }

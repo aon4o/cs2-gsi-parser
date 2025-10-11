@@ -19,17 +19,17 @@ class Player
 
     public string $name;
 
-    public ObservatorSlot|null $observer_slot;
+    public ObservatorSlot|null $observer_slot = null;
 
-    public TeamType|null $team;
+    public TeamType|null $team = null;
 
     public PlayerActivity $activity;
 
-    public PlayerState|null $state;
+    public PlayerState|null $state = null;
 
-    public string|null $position;
+    public string|null $position = null;
 
-    public string|null $forward;
+    public string|null $forward = null;
 
     public string|null $spectarget = null;
 }

@@ -28,7 +28,7 @@ class GameState
 
     public Auth $auth;
 
-    public Map|null $map;
+    public Map|null $map = null;
 
     public Round|null $round = null;
 
