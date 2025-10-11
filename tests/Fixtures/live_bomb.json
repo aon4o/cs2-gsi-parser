@@ -3,7 +3,7 @@
         "name": "Counter-Strike: Global Offensive",
         "appid": 730,
         "version": 14108,
-        "steamid": "76561198067092241",
+        "steamid": "11111111111111111",
         "timestamp": 1759002299
     },
     "map": {
@@ -30,8 +30,8 @@
         "bomb": "planted"
     },
     "player": {
-        "steamid": "76561198067092241",
-        "name": "MF BOOM ⛟",
+        "steamid": "11111111111111111",
+        "name": "Player Name",
         "observer_slot": 0,
         "team": "CT",
         "activity": "playing",
