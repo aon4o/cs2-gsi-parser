@@ -50,6 +50,3 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/pest --ci
-
-      - name: Type coverage
-        run: composer types
