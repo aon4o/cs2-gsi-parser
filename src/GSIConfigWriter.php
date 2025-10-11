@@ -96,23 +96,23 @@ class GSIConfigWriter
     }
 
     public function setData(
-        bool $map_round_wins,
-        bool $map,
-        bool $player_id,
-        bool $player_match_stats,
-        bool $player_state,
-        bool $player_weapons,
-        bool $provider,
-        bool $round,
-        bool $allgrenades,
-        bool $allplayers_id,
-        bool $allplayers_match_stats,
-        bool $allplayers_position,
-        bool $allplayers_state,
-        bool $allplayers_weapons,
-        bool $bomb,
-        bool $phase_countdowns,
-        bool $player_position,
+        bool $map_round_wins = true,
+        bool $map = true,
+        bool $player_id = true,
+        bool $player_match_stats = true,
+        bool $player_state = true,
+        bool $player_weapons = true,
+        bool $provider = true,
+        bool $round = true,
+        bool $allgrenades = true,
+        bool $allplayers_id = true,
+        bool $allplayers_match_stats = true,
+        bool $allplayers_position = true,
+        bool $allplayers_state = true,
+        bool $allplayers_weapons = true,
+        bool $bomb = true,
+        bool $phase_countdowns = true,
+        bool $player_position = true,
     ): GSIConfigWriter {
         $this->data = [
             'map_round_wins' => $map_round_wins,
@@ -137,7 +137,7 @@ class GSIConfigWriter
         return $this;
     }
 
-    public function text(): string
+    public function get(): string
     {
         $config = <<<EOT
 "$this->name"
