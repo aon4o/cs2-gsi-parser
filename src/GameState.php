@@ -19,6 +19,7 @@ use Aon4o\Cs2GsiParser\Types\Provider;
 use Aon4o\Cs2GsiParser\Types\Round;
 use InvalidArgumentException;
 use ReflectionException;
+use stdClass;
 
 class GameState
 {
@@ -62,9 +63,14 @@ class GameState
         $data = match ($data_type) {
             'string' => json_decode(json_encode(json_decode($data, true))),
             'array' => json_decode(json_encode($data)),
-            'object' => $data,
+            'object',
+            'NULL' => $data,
             default => throw new InvalidArgumentException('Invalid data type: ' . $data_type),
         };
+
+        if (empty($data)) {
+            $data = new stdClass();
+        }
 
         return new self($data);
     }
