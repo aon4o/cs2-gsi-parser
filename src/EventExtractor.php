@@ -12,7 +12,12 @@ use Aon4o\Cs2GsiParser\Enums\Custom\Event;
 
 class EventExtractor
 {
-    public function __construct(public GameState $previous, public GameState $current) {}
+    public function __construct(public GameState|null $previous = null, public GameState $current)
+    {
+        if ($this->previous !== null) {
+            $this->previous = GameState::from([]);
+        }
+    }
 
     /**
      * @return array<Event>
